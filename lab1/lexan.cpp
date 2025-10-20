@@ -1,20 +1,21 @@
 #include <iostream>
 #include <string>
-#include<vector>
+#include <vector>
 
-using namespace std; 
+using namespace std;
 /**
  * Функция dfaOddConsecutive реализует детерминированный конечный автомат (DFA),
  * который проверяет строку на наличие подцепочек с нечётным количеством подряд идущих '1' и '0'.
- * 
+ *
  * Данный автомат построен на принципе подсчёта максимально длинных последовательных блоков единиц и нулей,
  * и проверяет, чтобы эти максимальные длины были нечётными.
- * 
+ *
  * @param str Входная строка, состоящая из символов '0' и '1'.
  * @return true, если в строке есть подцепочки с нечётным числом подряд идущих единиц и нулей.
  *         false, если условие не выполнено или в строке есть недопустимые символы.
  */
-bool dfaOddConsecutive(const std::string& str) {
+bool dfaOddConsecutive(const std::string &str)
+{
     // Счётчик для текущей последовательности единиц
     int countOne = 0;
     // Счётчик для текущей последовательности нулей
@@ -27,12 +28,17 @@ bool dfaOddConsecutive(const std::string& str) {
     char last = '\0';
 
     // Проходим по каждому символу строки
-    for (char c : str) {
-        if (c == '1') {
+    for (char c : str)
+    {
+        if (c == '1')
+        {
             // Если текущий символ равен '1' и предыдущий тоже '1' – увеличиваем счётчик подряд идущих единиц
-            if (last == '1') {
+            if (last == '1')
+            {
                 countOne++;
-            } else {
+            }
+            else
+            {
                 // Иначе начинаем новый подсчёт одиниц
                 countOne = 1;
             }
@@ -40,16 +46,23 @@ bool dfaOddConsecutive(const std::string& str) {
             maxOne = std::max(maxOne, countOne);
             // Сбрасываем счётчик нулей, так как текущий символ '1'
             countZero = 0;
-        } else if (c == '0') {
+        }
+        else if (c == '0')
+        {
             // Аналогично для нулей
-            if (last == '0') {
+            if (last == '0')
+            {
                 countZero++;
-            } else {
+            }
+            else
+            {
                 countZero = 1;
             }
             maxZero = std::max(maxZero, countZero);
             countOne = 0;
-        } else {
+        }
+        else
+        {
             // Если встречен недопустимый символ — сразу возвращаем false
             return false;
         }
@@ -59,14 +72,15 @@ bool dfaOddConsecutive(const std::string& str) {
     // Возвращаем true только если максимальная длина подряд идущих единиц и нулей — нечетная
     return (maxOne % 2 == 1) && (maxZero % 2 == 1);
 }
-struct TestCase {
-        std::string input;
-        bool expected;
-        std::string description;
-    };
+struct TestCase
+{
+    std::string input;
+    bool expected;
+    std::string description;
+};
 
-
-int main() {
+int main()
+{
 
     std::vector<TestCase> tests = {
         {"11", false, "Две '1' — чётная длина, нет нечётных блоков"},
@@ -79,17 +93,19 @@ int main() {
         {"", false, "Пустая строка"},
         {"10101", true, "Все блоки длины 1 — нечётные"},
         {"0011", false, "Все блоки чётной длины"},
-        {"abc101def", true, "С посторонними символами (после фильтрации остаётся '101')"}
-    };
+        {"abc101def", true, "С посторонними символами (после фильтрации остаётся '101')"}};
 
     int passed = 0;
     int total = tests.size();
 
-    for (const auto& test_case : tests) {
+    for (const auto &test_case : tests)
+    {
         // Фильтруем только '0' и '1'
         std::string filtered;
-        for (char c : test_case.input) {
-            if (c == '0' || c == '1') {
+        for (char c : test_case.input)
+        {
+            if (c == '0' || c == '1')
+            {
                 filtered += c;
             }
         }
@@ -102,7 +118,8 @@ int main() {
                   << "отфильтровано: \"" << filtered << "\", получено: " << (result ? "да" : "нет")
                   << ", ожидалось: " << (test_case.expected ? "да" : "нет") << "\n";
 
-        if (success) passed++;
+        if (success)
+            passed++;
     }
 
     std::cout << "\nПройдено тестов: " << passed << " из " << total << "\n";
