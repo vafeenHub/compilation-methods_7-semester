@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
+#include<vector>
 
+using namespace std; 
 /**
  * Функция dfaOddConsecutive реализует детерминированный конечный автомат (DFA),
  * который проверяет строку на наличие подцепочек с нечётным количеством подряд идущих '1' и '0'.
@@ -57,22 +59,52 @@ bool dfaOddConsecutive(const std::string& str) {
     // Возвращаем true только если максимальная длина подряд идущих единиц и нулей — нечетная
     return (maxOne % 2 == 1) && (maxZero % 2 == 1);
 }
+struct TestCase {
+        std::string input;
+        bool expected;
+        std::string description;
+    };
+
 
 int main() {
-    // Исходная строка с возможными недопустимыми символами
-    std::string test = "2000111000000111";
 
-    // Фильтрация строки: сохраняем только символы '0' и '1'
-    std::string filtered;
-    for (char c : test) 
-        if (c == '0' || c == '1') 
-            filtered += c;
+    std::vector<TestCase> tests = {
+        {"11", false, "Две '1' — чётная длина, нет нечётных блоков"},
+        {"00", false, "Два '0' — чётная длина"},
+        {"1100", false, "Все блоки чётной длины"},
+        {"1010", true, "Каждый блок длины 1 — нечётный"},
+        {"110011", false, "Все блоки длины 2 — чётные"},
+        {"111000111", true, "Блоки длины 3 — нечётные"},
+        {"1111", false, "Блок длины 4 — чётный"},
+        {"", false, "Пустая строка"},
+        {"10101", true, "Все блоки длины 1 — нечётные"},
+        {"0011", false, "Все блоки чётной длины"},
+        {"abc101def", true, "С посторонними символами (после фильтрации остаётся '101')"}
+    };
 
-    // Вывод результата проверки
-    if (dfaOddConsecutive(filtered)) {
-        std::cout << "Строка содержит нечетное число подряд идущих единиц и нулей\n";
-    } else {
-        std::cout << "Условие не выполнено\n";
+    int passed = 0;
+    int total = tests.size();
+
+    for (const auto& test_case : tests) {
+        // Фильтруем только '0' и '1'
+        std::string filtered;
+        for (char c : test_case.input) {
+            if (c == '0' || c == '1') {
+                filtered += c;
+            }
+        }
+
+        bool result = dfaOddConsecutive(filtered);
+        bool success = (result == test_case.expected);
+
+        std::cout << (success ? "[ПРОЙДЕН] " : "[ОШИБКА] ")
+                  << test_case.description << " -> "
+                  << "отфильтровано: \"" << filtered << "\", получено: " << (result ? "да" : "нет")
+                  << ", ожидалось: " << (test_case.expected ? "да" : "нет") << "\n";
+
+        if (success) passed++;
     }
+
+    std::cout << "\nПройдено тестов: " << passed << " из " << total << "\n";
     return 0;
 }
