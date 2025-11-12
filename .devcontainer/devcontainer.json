@@ -26,7 +26,7 @@
       }
     }
   },
-  "workspaceMount": "source=${localWorkspaceFolder},target=/{localWorkspaceFolderBasename},type=bind",
-  "workspaceFolder": "/{localWorkspaceFolderBasename}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/${localWorkspaceFolderBasename}",
   "remoteUser": "root"
 }
