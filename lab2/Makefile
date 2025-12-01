@@ -2,7 +2,7 @@ TARGET = main.exe
 CXX = g++
 CXXFLAGS = -Wall -std=c++17
 SRC = main.cpp
-HDR = ../main.hpp
+HDR = main.hpp
 
 all: clean $(TARGET)
 	./$(TARGET)
